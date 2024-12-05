@@ -10,12 +10,14 @@ spring:
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: none
         show-sql: true
     security:
-        user:
-            name: ${USER_NAME:user} # Default to "user" if the environment variable is not set
-            password: ${USER_PASSWORD:defaultPassword} # Default to "defaultPassword" if the environment variable is not set
+        basic:
+            enabled: false
+#        user:
+#            name: ${USER_NAME:user} # Default to "user" if the environment variable is not set
+#            password: ${USER_PASSWORD:defaultPassword} # Default to "defaultPassword" if the environment variable is not set
 logging:
     level:
         org.springframework.security: DEBUG

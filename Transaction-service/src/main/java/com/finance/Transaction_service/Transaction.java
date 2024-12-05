@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +29,7 @@ public class Transaction {
     private String type;
 
     @Column(nullable = false)
-    private LocalDateTime transactionDate;
+    private LocalDate transactionDate;
 
     private String description;
 

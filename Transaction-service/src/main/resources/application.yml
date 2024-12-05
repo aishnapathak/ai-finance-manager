@@ -1,31 +1,44 @@
+logging:
+    level:
+        org:
+            hibernate:
+                sql: DEBUG
+                type:
+                    descriptor:
+                        sql:
+                            BasicBinder: TRACE
+            springframework:
+                http:
+                    client:
+                        HttpComponentsClientHttpRequestFactory: DEBUG
+                web:
+                    client:
+                        RestTemplate: DEBUG
+server:
+    port: 8082
 spring:
     application:
         name: Transaction-service
     datasource:
+        driver-class-name: org.postgresql.Driver
         password: aishnapathak
         url: jdbc:postgresql://localhost:5432/transaction
         username: aishnapathak
-        driver-class-name: org.postgresql.Driver
     jpa:
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: none
+        properties:
+            hibernate:
+                format_sql: true
         show-sql: true
     security:
         user:
-            name: ${USER_NAME:user} # Default to "user" if the environment variable is not set
-            password: ${USER_PASSWORD:defaultPassword} # Default to "defaultPassword" if the environment variable is not set
-
-server:
-    port: 8082
+            name: ${USER_NAME:user}
+            password: ${USER_PASSWORD:defaultPassword}
 user-service:
-        base-url: http://localhost:8080
-        auth:
-            username: aishnapathak
-            password: aishnapathak
-logging:
-    level:
-        org.springframework.web.client.RestTemplate: DEBUG
-        org.springframework.http.client.HttpComponentsClientHttpRequestFactory: DEBUG
-
+    auth:
+        password: aishnapathak
+        username: aishnapathak
+    base-url: http://localhost:8080

@@ -1,0 +1,12 @@
+ollama:
+    api:
+        url: http://localhost:5005/v1/ai
+server:
+    port: 8081
+spring:
+    application:
+        name: AI-service
+    security:
+        user:
+            name: ${USER_NAME:user}
+            password: ${USER_PASSWORD:defaultPassword}
