@@ -1,7 +1,8 @@
 package com.finance.AI_service;
 
+import com.finance.AI_service.model.InsightsRequest;
+import com.finance.AI_service.model.InsightsResponse;
+
 public interface AIService {
-    String getFinancialSummary(String transactionData);
-    String constructRequestPayload(String transactionData);
-    String sendToOllama(String requestPayload);
+//    String getInsights(String userPrompt);
 }

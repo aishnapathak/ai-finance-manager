@@ -23,11 +23,11 @@ public class TransactionController {
         return ResponseEntity.ok(createdTransaction);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TransactionDTO>> getTransactionsByUserId(@PathVariable Long userId) {
-        List<TransactionDTO> transactions = transactionService.getTransactionsByUserId(userId);
-        return ResponseEntity.ok(transactions);
-    }
+//    @GetMapping("/user/{userId}")
+//    public ResponseEntity<List<TransactionDTO>> getTransactionsByUserId(@PathVariable Long userId) {
+//        List<TransactionDTO> transactions = transactionService.getTransactionsByUserId(userId);
+//        return ResponseEntity.ok(transactions);
+//    }
     @PutMapping("/{id}")
     public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO) {
         TransactionDTO updatedTransaction = transactionService.updateTransaction(id, transactionDTO);
@@ -40,7 +40,7 @@ public class TransactionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
         List<TransactionDTO> transactions = transactionService.getAllTransactions();
         return ResponseEntity.ok(transactions);
@@ -65,6 +65,12 @@ public class TransactionController {
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate) {
         return transactionService.getMonthlySpendingIncomeTrend(userId, startDate, endDate);
+    }
+
+    @GetMapping
+    public List<TransactionDTO> getTransactionsByUser(@RequestParam Long userId) {
+        // Fetch transactions for the user from the database
+        return transactionService.getTransactionsByUserId(userId);
     }
 
 }
