@@ -2,10 +2,13 @@ package com.finance.User_service;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name="users")
 @Data
+@RequiredArgsConstructor
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +24,7 @@ public class User {
     private String fullName;
 
     private String phoneNumber;
+
+    @Column(nullable = false)
+    private String password;
 }

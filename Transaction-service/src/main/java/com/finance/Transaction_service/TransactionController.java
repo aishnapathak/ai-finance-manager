@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
@@ -49,12 +50,12 @@ public class TransactionController {
     @GetMapping("/filter")
     public ResponseEntity<List<TransactionDTO>> filterTransactions(
             @RequestParam Long userId,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String type,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) BigDecimal minAmount,
             @RequestParam(required = false) BigDecimal maxAmount) {
-        List<TransactionDTO> transactions = transactionService.filterTransactions(userId,category, startDate, endDate,  minAmount, maxAmount);
+        List<TransactionDTO> transactions = transactionService.filterTransactions(userId,type, startDate, endDate,  minAmount, maxAmount);
         return ResponseEntity.ok(transactions);
     }
 
@@ -71,6 +72,22 @@ public class TransactionController {
     public List<TransactionDTO> getTransactionsByUser(@RequestParam Long userId) {
         // Fetch transactions for the user from the database
         return transactionService.getTransactionsByUserId(userId);
+    }
+
+    @GetMapping("/totalincome")
+    public List<MonthlyAnalyticsDTO> getMonthlyIncome(
+            @RequestParam Long userId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
+        return transactionService.getMonthlyIncomeTrend(userId, startDate, endDate);
+    }
+
+    @GetMapping("/totalspending")
+    public List<MonthlyAnalyticsDTO> getMonthlySpending(
+            @RequestParam Long userId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
+        return transactionService.getMonthlySpendingTrend(userId, startDate, endDate);
     }
 
 }

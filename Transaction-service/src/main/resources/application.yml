@@ -21,9 +21,9 @@ spring:
         name: Transaction-service
     datasource:
         driver-class-name: org.postgresql.Driver
-        password: aishnapathak
+        password: Annie@2003
         url: jdbc:postgresql://localhost:5432/transaction
-        username: aishnapathak
+        username: postgres
     jpa:
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect

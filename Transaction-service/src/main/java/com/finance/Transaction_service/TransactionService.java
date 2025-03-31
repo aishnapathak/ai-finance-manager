@@ -16,4 +16,6 @@ public interface TransactionService {
     List<TransactionDTO> filterTransactions(Long userId, String category, LocalDate startDate, LocalDate endDate, BigDecimal minAmount, BigDecimal maxAmount);
 
     List<MonthlyAnalyticsDTO> getMonthlySpendingIncomeTrend(Long userId, LocalDate startDate, LocalDate endDate);
+    List<MonthlyAnalyticsDTO> getMonthlyIncomeTrend(Long userId, LocalDate startDate, LocalDate endDate);
+    List<MonthlyAnalyticsDTO> getMonthlySpendingTrend(Long userId, LocalDate startDate, LocalDate endDate);
 }

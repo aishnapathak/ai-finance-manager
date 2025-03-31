@@ -34,13 +34,41 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     // Query to get monthly income or spending trends
     @Query("SELECT EXTRACT(YEAR FROM t.transactionDate) AS year, " +
             "EXTRACT(MONTH FROM t.transactionDate) AS month, " +
-            "SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE -t.amount END) AS totalAmount " +
+            "SUM(CASE WHEN t.type = 'Income' THEN t.amount ELSE -t.amount END) AS totalAmount " +
             "FROM Transaction t " +
             "WHERE t.userId = :userId " +
             "AND t.transactionDate BETWEEN :startDate AND :endDate " +
             "GROUP BY year, month " +
             "ORDER BY year, month")
     List<Object[]> getMonthlySpendingIncomeTrend(
+            @Param("userId") Long userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+
+    //Query to calculate complete income for a month
+    @Query("SELECT EXTRACT(YEAR FROM t.transactionDate) AS year, " +
+            "EXTRACT(MONTH FROM t.transactionDate) AS month, " +
+            "SUM(CASE WHEN t.type = 'Income' THEN t.amount ELSE 0 END) AS totalAmount " +
+            "FROM Transaction t " +
+            "WHERE t.userId = :userId " +
+            "AND t.transactionDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY year, month " +
+            "ORDER BY year, month")
+    List<Object[]> getMonthlyIncomeTrend(
+            @Param("userId") Long userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+
+    //Query to calculate monthly expenses
+    @Query("SELECT EXTRACT(YEAR FROM t.transactionDate) AS year, " +
+            "EXTRACT(MONTH FROM t.transactionDate) AS month, " +
+            "SUM(CASE WHEN t.type = 'Expense' THEN t.amount ELSE 0 END) AS totalAmount " +
+            "FROM Transaction t " +
+            "WHERE t.userId = :userId " +
+            "AND t.transactionDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY year, month " +
+            "ORDER BY year, month")
+    List<Object[]> getMonthlySpendingTrend(
             @Param("userId") Long userId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);

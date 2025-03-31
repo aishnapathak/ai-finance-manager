@@ -89,20 +89,52 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> filterTransactions(Long userId,String category, LocalDate startDate, LocalDate endDate,  BigDecimal minAmount, BigDecimal maxAmount) {
+    public List<TransactionDTO> filterTransactions(Long userId,String type, LocalDate startDate, LocalDate endDate,  BigDecimal minAmount, BigDecimal maxAmount) {
         if (minAmount == null) {
             minAmount = BigDecimal.valueOf(Double.MIN_VALUE);
         }
         if (maxAmount == null) {
             maxAmount = BigDecimal.valueOf(Double.MAX_VALUE);
         }
-        List<Transaction> transactions = transactionRepository.filterTransactions(userId, category, startDate, endDate,  minAmount, maxAmount);
+        List<Transaction> transactions = transactionRepository.filterTransactions(userId, type, startDate, endDate,  minAmount, maxAmount);
         return transactions.stream().map(transactionMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<MonthlyAnalyticsDTO> getMonthlySpendingIncomeTrend(Long userId, LocalDate startDate, LocalDate endDate) {
         List<Object[]> results = transactionRepository.getMonthlySpendingIncomeTrend(userId, startDate, endDate);
+        List<MonthlyAnalyticsDTO> analyticsList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            int year = ((Number) result[0]).intValue();
+            int month = ((Number) result[1]).intValue();
+            double totalAmount = ((Number) result[2]).doubleValue();
+
+            MonthlyAnalyticsDTO dto = new MonthlyAnalyticsDTO(year, month, totalAmount);
+            analyticsList.add(dto);
+        }
+        return analyticsList;
+    }
+
+    @Override
+    public List<MonthlyAnalyticsDTO> getMonthlyIncomeTrend(Long userId, LocalDate startDate, LocalDate endDate) {
+        List<Object[]> results = transactionRepository.getMonthlyIncomeTrend(userId, startDate, endDate);
+        List<MonthlyAnalyticsDTO> analyticsList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            int year = ((Number) result[0]).intValue();
+            int month = ((Number) result[1]).intValue();
+            double totalAmount = ((Number) result[2]).doubleValue();
+
+            MonthlyAnalyticsDTO dto = new MonthlyAnalyticsDTO(year, month, totalAmount);
+            analyticsList.add(dto);
+        }
+        return analyticsList;
+    }
+
+    @Override
+    public List<MonthlyAnalyticsDTO> getMonthlySpendingTrend(Long userId, LocalDate startDate, LocalDate endDate) {
+        List<Object[]> results = transactionRepository.getMonthlySpendingTrend(userId, startDate, endDate);
         List<MonthlyAnalyticsDTO> analyticsList = new ArrayList<>();
 
         for (Object[] result : results) {
