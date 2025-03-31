@@ -4,7 +4,8 @@ import axios from "axios";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
-import SalesOverviewChart from "../components/overview/SalesOverviewChart";
+import OverviewChart from "../components/overview/OverviewChart";
+import  Sidebar  from "../components/common/Sidebar";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
@@ -58,10 +59,12 @@ const HomePage = () => {
 	}, [userId]);
 
 	return (
-		<div className='flex-1 overflow-auto relative z-10'>
-			<Header title='Overview' />
+		<div className='flex h-full w-screen overflow-hidden relative z-10'>
+			<Sidebar />
 
-			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
+			<div className="flex-1 flex flex-col w- full h-full">
+			<Header title='Overview' />
+			<main className='w-full max-w-7xl mx-auto py-6 px-4 lg:px-8'>
 				{/* STATS */}
 				<motion.div
 					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 mb-8'
@@ -76,9 +79,10 @@ const HomePage = () => {
 				{/* CHARTS */}
 
 				<div /*className='grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-8'*/>
-					<SalesOverviewChart/>
+					<OverviewChart/>
 				</div>
 			</main>
+			</div>
 		</div>
 	);
 };

@@ -4,7 +4,7 @@ import SignInFormFunction        from '../Form/SignInFormFunction'
 import SignUpFormFunction        from '../Form/SignUpFormFunction'
 import { useState } from 'react'
 
-const DarkVersion = () => {
+const FirstPage = () => {
 
     const [isSignUp, setIsSignUp] = useState(false);
 
@@ -82,4 +82,4 @@ const DarkVersion = () => {
     )
 }
 
-export default DarkVersion
+export default FirstPage;

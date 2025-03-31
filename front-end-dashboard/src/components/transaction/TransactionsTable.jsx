@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 				</div>
 */
 
-const ProductsTable = () => {
+const TransactionsTable = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	//const [filteredProducts, setFilteredProducts] = useState(PRODUCT_DATA);
 
@@ -42,6 +42,48 @@ const ProductsTable = () => {
   //const [filteredProducts, setFilteredProducts] = useState("");
 
 
+
+  const handleEdit = async (transaction) => {
+	const updatedAmount = prompt("Enter new amount:", transaction.amount);
+	if (!updatedAmount) return;
+  
+	try {
+	  const response = await fetch(`http://localhost:8082/transaction/${transaction.id}`, {
+		method: "PUT",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ ...transaction, amount: updatedAmount }),
+	  });
+  
+	  if (!response.ok) throw new Error("Failed to update transaction");
+  
+	  // Refresh transactions after update
+	  setTransactions((prev) =>
+		prev.map((t) => (t.id === transaction.id ? { ...t, amount: updatedAmount } : t))
+	  );
+	} catch (error) {
+	  console.error("Error updating transaction:", error);
+	}
+  };
+
+
+  const handleDelete = async (transactionId) => {
+	if (!window.confirm("Are you sure you want to delete this transaction?")) return;
+  
+	try {
+	  const response = await fetch(`http://localhost:8082/transaction/${transactionId}`, {
+		method: "DELETE",
+	  });
+  
+	  if (!response.ok) throw new Error("Failed to delete transaction");
+  
+	  // Remove the deleted transaction from state
+	  setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
+	} catch (error) {
+	  console.error("Error deleting transaction:", error);
+	}
+  };
+  
+  
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -64,6 +106,7 @@ const ProductsTable = () => {
       fetchTransactions();
     }
   }, [userId]);
+
   
 
   if (loading) return <p>Loading transactions...</p>;
@@ -75,9 +118,10 @@ const ProductsTable = () => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.2 }}
+
 		>
 			<div className='flex justify-between items-center mb-6'>
-				<h2 className='text-xl font-semibold text-gray-100'>Product List</h2>
+				<h2 className='text-xl font-semibold text-gray-100'>Transaction History</h2>
 				
 			</div>
 
@@ -128,10 +172,10 @@ const ProductsTable = () => {
 								<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-300'>{transaction.type}</td>
 								<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-300'>{transaction.description}</td>
 								<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-300'>
-									<button className='text-indigo-400 hover:text-indigo-300 mr-2'>
+									<button className='text-indigo-400 hover:text-indigo-300 mr-2' onClick={() => handleEdit(transaction)}>
 										<Edit size={18} />
 									</button>
-									<button className='text-red-400 hover:text-red-300'>
+									<button className='text-red-400 hover:text-red-300'  onClick={() => handleDelete(transaction.id)}>
 										<Trash2 size={18} />
 									</button>
 								</td>
@@ -143,4 +187,4 @@ const ProductsTable = () => {
 		</motion.div>
 	);
 };
-export default ProductsTable;
+export default TransactionsTable;

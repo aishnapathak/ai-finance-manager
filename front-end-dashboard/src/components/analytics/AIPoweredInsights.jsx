@@ -1,45 +1,57 @@
 import { useState } from "react";
+import { motion } from "framer-motion"
 
-const Chatbot = () => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+const AIPoweredInsights = () => {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
+  const handleAsk = async () => {
+    if (!question.trim()) return;
 
-    // Add user message to chat
-    setMessages([...messages, { text: input, sender: "user" }]);
-    setInput("");
-
-    // TODO: Send `input` to backend and get response
-    // const response = await fetch('BACKEND_API_URL', { method: 'POST', body: JSON.stringify({ message: input }) })
-    // const data = await response.json();
-    // setMessages(prev => [...prev, { text: data.reply, sender: "bot" }]);
+    try {
+      const response = await fetch("http://localhost:8080/ai-answer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question }),
+      });
+      const data = await response.json();
+      setAnswer(data.answer);
+    } catch (error) {
+      console.error("Error fetching answer:", error);
+      setAnswer("Failed to get an answer. Please try again.");
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-gray-800 text-white rounded-lg shadow-lg">
-      <div className="h-80 overflow-y-auto border-b border-gray-600 p-2">
-        {messages.map((msg, index) => (
-          <div key={index} className={`mb-2 p-2 rounded-lg ${msg.sender === "user" ? "bg-blue-500 self-end" : "bg-gray-700 self-start"}`}>
-            {msg.text}
-          </div>
-        ))}
-      </div>
-      <div className="flex mt-2">
-        <input
-          className="flex-grow p-2 text-black rounded-l-lg"
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button onClick={handleSendMessage} className="bg-blue-600 px-4 py-2 rounded-r-lg">
-          Send
-        </button>
-      </div>
+    <motion.div
+			className='bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 mb-8'
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.2 }}
+
+		>
+    <div className="w-full max-w-7xl mx-auto p-4 bg-gray-800 text-white ">
+      <input
+        className="w-full p-2 text-white rounded-lg"
+        type="text"
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask something..."
+      />
+      <button onClick={handleAsk} className="w-full mt-2 bg-[#36454F] px-4 py-2 rounded-lg">
+        Ask
+      </button>
+      <textarea
+        className="w-full mt-2 p-2 text-white rounded-lg"
+        value={answer}
+        readOnly
+        placeholder="Answer will appear here..."
+      />
     </div>
+    </motion.div>
   );
 };
 
-export default Chatbot;
+export default AIPoweredInsights;

@@ -5,11 +5,16 @@ import axios from "axios";
 
 const DangerZone = () => {
 
-	const [userId, setUserId] = [2]
+	const [userId, setUserId] = [3]
 
 		const handleDelete = async () => {
 		  try {
-			await axios.delete(`http://localhost:8080/users/${userId}`);
+			const response = await fetch(`http://localhost:8080/users/${userId}`,
+				{
+					method: "DELETE",
+				}
+			);
+			console.log(response);
 			alert("User deleted successfully!");
 		  } catch (error) {
 			console.error("Error deleting user:", error);

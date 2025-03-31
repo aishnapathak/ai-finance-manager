@@ -2,41 +2,69 @@
 // ================== All Imports
 import React, { useState }      from 'react'
 import { Eye, EyeOff }  from 'lucide-react'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SignInFormFunction = () => {
 
     // ================== All Use-States
-    const [email,      setEmail]        = useState("")
-    const [pass,       setPass]         = useState("")
-    const [emailError, setEmailError]   = useState("")
+    const [username,      setUsername]        = useState("")
+    const [password,       setPassword]         = useState("")
+    const [UError, setUError]   = useState("")
     const [passError,  setPassError]    = useState("")
     const [show,       block]           = useState(true) // for toggle
+    const navigate = useNavigate();  // Hook for navigation
 
     // ================== All Functions
 
     //  for handeling email
-    const handleEmail = (e) => {
-        setEmail        (e.target.value)
-        setEmailError   ("")
+    const handleU = (e) => {
+        setUsername        (e.target.value)
+        setUError   ("")
     }
 
     //  for handeling password
     const handlePass = (e) => {
-        setPass        (e.target.value)
+        setPassword        (e.target.value)
         setPassError   ("")       
     }
 
     //  for handeling submit button
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
 
-        if (!email) {
-            setEmailError("Please! Enter Your Email")
+        if (!username) {
+            setUError("Please! Enter Your Email")
         }
-        if (!pass) {
+        if (!password) {
             setPassError ("Please! Enter Password")
         }
-    }
+
+    try {
+        // ✅ Replace this with your actual backend URL
+        const response = await axios.get(`http://localhost:8080/users/get/${username}`);
+  
+        // ✅ Backend should return user details, validate password
+        if (response.data.password === password) {
+          alert("Login Successful!");
+          console.log("User Data:", response.data);
+          // Redirect or save user info in localStorage
+
+          // Store user data in localStorage or state (optional)
+          localStorage.setItem('userData', JSON.stringify(response.data)); 
+
+          // Redirect to the dashboard with user data
+          navigate("/overview", {
+              state: { userData: response.data },  // Passing user data to the dashboard
+          });
+        } else {
+          setPassError("Invalid Password");
+        }
+      } catch (error) {
+        console.error("Error:", error.response ? error.response.data : error);
+        setUError("User not found");
+      }
+    };
 
     //  for toggle
     const showPass = () => {
@@ -50,8 +78,8 @@ const SignInFormFunction = () => {
 
                 {/* ===================== Email Part ===================== */}
                 <label className='relative'>
-                    <input onChange={handleEmail} type="email" placeholder='Enter Email' className='w-full h-[62px] border-[2px] border-[#FFFFFF] pl-4 text-[22px] font-Roboto font-light rounded-lg outline-none' />
-                    <p className='absolute text-[#FF0000] mix-blend-difference top-[-40px] left-2 text-sm animate-pulse'>{emailError}</p>
+                    <input onChange={handleU} type="text" placeholder='Enter Username' className='w-full h-[62px] border-[2px] border-[#FFFFFF] pl-4 text-[22px] font-Roboto font-light rounded-lg outline-none' />
+                    <p className='absolute text-[#FF0000] mix-blend-difference top-[-40px] left-2 text-sm animate-pulse'>{UError}</p>
                 </label>
 
                 {/* ===================== Password Part ===================== */}

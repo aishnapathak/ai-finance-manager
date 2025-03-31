@@ -2,12 +2,13 @@
 // ================== All Imports
 import React, { useState }      from 'react'
 import { Eye, EyeOff }  from 'lucide-react'
+import axios from 'axios'
 
 const SignUpFormFunction = () => {
 
     // ================== All Use-States
     const [email,      setEmail]        = useState("")
-    const [pass,       setPass]         = useState("")
+    const [password,       setPassword]         = useState("")
     const [emailError, setEmailError]   = useState("")
     const [passError,  setPassError]    = useState("")
     const [show,       block]           = useState(true) // for toggle
@@ -15,7 +16,7 @@ const SignUpFormFunction = () => {
     const [username,       setUsername]         = useState("")
     const [fnameError, setFnameError]   = useState("")
     const [userError,  setUserError]    = useState("")
-    const [phone,      setPhone]        = useState("")
+    const [phoneNumber,      setPhoneNumber]        = useState("")
     const [phoneError, setPhoneError] = useState("")
     
     // ================== All Functions
@@ -28,30 +29,42 @@ const SignUpFormFunction = () => {
 
     //  for handeling password
     const handlePass = (e) => {
-        setPass        (e.target.value)
+        setPassword        (e.target.value)
         setPassError   ("")       
     }
 
     //  for handeling submit button
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        if (!email) {
-            setEmailError("Please! Enter Your Email")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        const userData = {
+            username,
+            email,
+            fullName,
+            phoneNumber,
+            password
+        };
+    
+        try {
+            const response = await fetch("http://localhost:8080/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...userData}),
+              });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+                alert("User registered successfully!");
+            } else {
+                alert(`Error: ${result}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
         }
-        if (!pass) {
-            setPassError ("Please! Enter Password")
-        }
-        if (!phone) {
-            setPhoneError("Please! Enter Your Phone Number")
-        }
-        if (!fullName) {
-            setFnameError("Please! Enter Your Full Name")
-        }
-        if (!username) {
-            setUserError("Please! Enter Your Username")
-        }
-    }
+    };
+    
 
     //  for toggle
     const showPass = () => {
@@ -72,7 +85,7 @@ const SignUpFormFunction = () => {
 
     //for handeling phone number
     const handlephone = (e) => {
-        setPhone        (e.target.value)
+        setPhoneNumber        (e.target.value)
         setPhoneError   ("")
     }
 
