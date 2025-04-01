@@ -4,7 +4,7 @@ import  Sidebar  from "../components/common/Sidebar";
 
 const TransactionsPage = () => {
 	return (
-		<div className="flex h-full w-screen overflow-hidden bg-gray-900">
+		<div className="flex h-full min-h-screen w-screen overflow-hidden bg-gray-900">
 			{/* Sidebar on the left */}
 			<Sidebar />
 

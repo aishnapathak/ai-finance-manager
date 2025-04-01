@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const AddTransactionForm = ({ userId = 1, onTransactionAdded }) => {
+const AddTransactionForm = ({ onTransactionAdded }) => {
   const [formData, setFormData] = useState({
     amount: "",
     transactionDate: "",
     category: "",
     description: "",
-    type: "expense", // Default type
+    type: "Expense", // Default type
   });
+
+  const user = JSON.parse(localStorage.getItem("userData"));
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,13 +23,13 @@ const AddTransactionForm = ({ userId = 1, onTransactionAdded }) => {
       const response = await fetch("http://localhost:8082/transaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, userId: userId }),
+        body: JSON.stringify({ ...formData, userId: user.id }),
       });
 
       if (!response.ok) throw new Error("Failed to add transaction");
 
       const newTransaction = await response.json();
-      setFormData({ amount: "", transactionDate: "", category: "", description: "", type: "expense" }); // Reset form
+      setFormData({ amount: "", transactionDate: "", category: "", description: "", type: "Expense" }); // Reset form
     } catch (error) {
       console.error("Error adding transaction:", error);
     }
@@ -101,8 +103,8 @@ const AddTransactionForm = ({ userId = 1, onTransactionAdded }) => {
           required
           className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none"
         >
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
+          <option value="Income">Income</option>
+          <option value="Expense">Expense</option>
         </select>
       </div>
 

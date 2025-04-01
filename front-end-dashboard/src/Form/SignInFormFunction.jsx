@@ -34,7 +34,7 @@ const SignInFormFunction = () => {
         e.preventDefault()
 
         if (!username) {
-            setUError("Please! Enter Your Email")
+            setUError("Please! Enter Your Username")
         }
         if (!password) {
             setPassError ("Please! Enter Password")

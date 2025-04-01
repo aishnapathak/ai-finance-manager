@@ -10,15 +10,38 @@ const OverviewChart = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	
+
 	// Define start and end date (full financial year)
-	const startDate = "2024-01-01";
-	const endDate = "2024-12-31";
-	const userId = 1;
+	// ✅ Get user from localStorage
+	const user = JSON.parse(localStorage.getItem("userData"));
+
+		// Get current date
+
+		const today = new Date();
+		const firstDate = new Date(today.getFullYear(), 0, 1);
+
+// Last day of the current year (December 31st)
+const lastDate = new Date(today.getFullYear(), 11, 31);
+
+// Function to format a date as YYYY-MM-DD
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Adding leading zero for months
+  const day = String(date.getDate()).padStart(2, '0'); // Adding leading zero for days
+  return `${year}-${month}-${day}`;
+};
+
+const startDate = formatDate(firstDate);
+const endDate = formatDate(lastDate);
+
+console.log("First Date of the Year:", startDate); // Expected: YYYY-01-01
+console.log("Last Date of the Year:", endDate);   // Expected: YYYY-12-31
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios.get(`http://localhost:8082/transaction/analytics?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+				const response = await axios.get(`http://localhost:8082/transaction/analytics?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`);
 
 				// Example response: [{ month: 11, totalAmount: 5400 }, { month: 12, totalAmount: 7200 }]
 				const apiData = response.data;
@@ -46,8 +69,8 @@ const OverviewChart = () => {
 			}
 		};
 
-		if (userId) fetchData(); // Only fetch if userId is available
-	}, [userId]);
+		if (user.id) fetchData(); // Only fetch if userId is available
+	}, [user.id]);
 
 
 	return (

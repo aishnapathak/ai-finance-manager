@@ -11,7 +11,7 @@ const FirstPage = () => {
     return (
         <>
         <div className='bg-gray-900 text-gray-100'>
-            <section className=' w-full h-full flex justify-end items-center px-20'>
+            <section className=' w-full h-full min-height-screen flex justify-end items-center px-20'>
 
                 {/* ================== Navbar Start ================== */}
                 <nav className=' absolute top-0 left-0 w-full py-6 px-12 flex justify-between items-center'>

@@ -2,9 +2,11 @@
 // ================== All Imports
 import React, { useState }      from 'react'
 import { Eye, EyeOff }  from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const SignUpFormFunction = () => {
+    const navigate = useNavigate();
 
     // ================== All Use-States
     const [email,      setEmail]        = useState("")
@@ -56,6 +58,7 @@ const SignUpFormFunction = () => {
     
             if (response.ok) {
                 alert("User registered successfully!");
+                navigate("/");
             } else {
                 alert(`Error: ${result}`);
             }

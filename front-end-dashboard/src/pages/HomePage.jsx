@@ -11,13 +11,44 @@ import { useEffect, useState } from "react";
 const HomePage = () => {
 
 	const [balance, setBalance] = useState(null);
-	const [userId, setUserId] = useState(1);
+	const [userId, setUserId] = useState(null);
 	const [spend, setSpend] = useState(null);
 
+	// ✅ Get user from localStorage
+	const user = JSON.parse(localStorage.getItem("userData"));
+
+		// Get current date
+		const today = new Date();
+	
+		console.log(today);
+		// Get the first and last date of the current month
+		const firstDate = new Date(today.getFullYear(), today.getMonth(), 1);
+		console.log(firstDate);
+		const lastDate = new Date(today.getFullYear(), today.getMonth() +1, 0);
+		console.log(lastDate);
+
+	
+		// Format dates as YYYY-MM-DD
+		const formatDate = (date) => {
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Adding leading zero for months
+			const day = String(date.getDate()).padStart(2, '0'); // Adding leading zero for days
+			return `${year}-${month}-${day}`;
+		  };
+		const startDate = formatDate(firstDate);
+		const endDate = formatDate(lastDate);
+	
+		console.log("Start Date:", startDate);
+		console.log("End Date:", endDate);
+
 	useEffect(() => {
+		if(!user) return;
+
 		const fetchBalance = async () => {
 			try {
-				const response = await axios.get(`http://localhost:8082/transaction/totalincome?userId=${userId}&startDate=2024-11-01&endDate=2024-11-30`);
+				console.log(user);
+				console.log(user.id);
+				const response = await axios.get(`http://localhost:8082/transaction/totalincome?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`);
 
 				console.log(response.data)
 				console.log(response.data[0].totalAmount)
@@ -30,6 +61,7 @@ const HomePage = () => {
 				}
 			} catch (error) {
 				console.error("Error fetching balance:", error);
+				setBalance(0)
 			}
 		};
 
@@ -37,9 +69,11 @@ const HomePage = () => {
 	}, [userId]);
 
 	useEffect(() => {
+		if(!user) return;
+
 		const fetchSpend = async () => {
 			try {
-				const response = await axios.get(`http://localhost:8082/transaction/totalspending?userId=${userId}&startDate=2024-11-01&endDate=2024-11-30`);
+				const response = await axios.get(`http://localhost:8082/transaction/totalspending?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`);
 
 				console.log(response.data)
 				console.log(response.data[0].totalAmount)
@@ -52,6 +86,7 @@ const HomePage = () => {
 				}
 			} catch (error) {
 				console.error("Error fetching balance:", error);
+				setSpend(0);
 			}
 		};
 

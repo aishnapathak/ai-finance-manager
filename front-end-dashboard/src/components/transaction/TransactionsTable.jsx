@@ -2,28 +2,9 @@ import { motion } from "framer-motion";
 import { Edit, Search, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-/*const PRODUCT_DATA = [
-	{ id: 1, name: "Wireless Earbuds", category: "Electronics", price: 59.99, stock: 143, sales: 1200 },
-	{ id: 2, name: "Leather Wallet", category: "Accessories", price: 39.99, stock: 89, sales: 800 },
-	{ id: 3, name: "Smart Watch", category: "Electronics", price: 199.99, stock: 56, sales: 650 },
-	{ id: 4, name: "Yoga Mat", category: "Fitness", price: 29.99, stock: 210, sales: 950 },
-	{ id: 5, name: "Coffee Maker", category: "Home", price: 79.99, stock: 78, sales: 720 },
-];
-<div className='relative'>
-					<input
-						type='text'
-						placeholder='Search products...'
-						className='bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-						onChange={handleSearch}
-						value={searchTerm}
-					/>
-					<Search className='absolute left-3 top-2.5 text-gray-400' size={18} />
-				</div>
-*/
 
 const TransactionsTable = () => {
 	const [searchTerm, setSearchTerm] = useState("");
-	//const [filteredProducts, setFilteredProducts] = useState(PRODUCT_DATA);
 
 	/*const handleSearch = (e) => {
 		const term = e.target.value.toLowerCase();
@@ -41,7 +22,7 @@ const TransactionsTable = () => {
   const [userId, setUserId] = useState(1);
   //const [filteredProducts, setFilteredProducts] = useState("");
 
-
+  const user = JSON.parse(localStorage.getItem("userData"));
 
   const handleEdit = async (transaction) => {
 	const updatedAmount = prompt("Enter new amount:", transaction.amount);
@@ -87,7 +68,7 @@ const TransactionsTable = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch(`http://localhost:8082/transaction?userId=${userId}`);
+        const response = await fetch(`http://localhost:8082/transaction?userId=${user.id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch transactions");
         }
@@ -102,10 +83,10 @@ const TransactionsTable = () => {
     };
 
 
-    if (userId) {
+    if (user.id) {
       fetchTransactions();
     }
-  }, [userId]);
+  }, [user.id]);
 
   
 

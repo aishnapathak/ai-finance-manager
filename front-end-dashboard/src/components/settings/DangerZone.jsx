@@ -1,21 +1,26 @@
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const DangerZone = () => {
+	const navigate = useNavigate();
 
-	const [userId, setUserId] = [3]
+	const user = JSON.parse(localStorage.getItem("userData"));
 
 		const handleDelete = async () => {
 		  try {
-			const response = await fetch(`http://localhost:8080/users/${userId}`,
+			const response = await fetch(`http://localhost:8080/users/${user.id}`,
 				{
 					method: "DELETE",
 				}
 			);
 			console.log(response);
+			if(response.ok){
 			alert("User deleted successfully!");
+			navigate("/");
+		}
 		  } catch (error) {
 			console.error("Error deleting user:", error);
 			alert("Failed to delete user.");
