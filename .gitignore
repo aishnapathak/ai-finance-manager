@@ -1,0 +1,23 @@
+# Python-related
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+env/
+ve/
+new/
+*.env
+
+# IDE-related
+.vscode/
+.idea/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# OS-specific
+.DS_Store
+Thumbs.db
